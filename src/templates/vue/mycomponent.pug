@@ -1,0 +1,8 @@
+script(type="text/x-template" id="mycomponent-template")
+    #main
+        nav(v-bind:class="active" v-on:click.prevent)
+            a(href="#" class="home" v-on:click="makeActive('home')") Home
+            a(href="#" class="projects" v-on:click="makeActive('projects')") About
+            a(href="#" class="services" v-on:click="makeActive('services')") Works
+            a(href="#" class="contact" v-on:click="makeActive('contact')") Blog
+        p You chose {{active}}

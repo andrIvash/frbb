@@ -11,7 +11,7 @@ const path = require('path');
 const config = {
   context: path.join(__dirname, '/src'),
   entry: {
-    app: ['./js/app.js', './js/getData.js']
+    app: ['./js/app.js', './js/getData.js', './js/main.js']
   },
   output: {
     filename: 'assets/scripts/[name].bundle.js',
