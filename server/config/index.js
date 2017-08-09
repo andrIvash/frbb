@@ -1,9 +1,9 @@
-//экспортируем настройки
-var nconf = require('nconf'),
-    path = require('path');
+// экспортируем настройки
+import nconf from 'nconf';
+import path from 'path';
 
-module.exports = function() {
+export default function() {
     return nconf.argv()
         .env()
-        .file({file: path.join(__dirname, 'config.json')})
-};
+        .file({file: path.join(__dirname, 'config.json')});
+}

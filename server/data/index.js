@@ -1,9 +1,9 @@
-var nconf = require('nconf'),
-    path = require('path');
+import nconf from 'nconf';
+import path from 'path';
 
-module.exports = function() {
+export default function() {
     nconf.stores.env.readOnly = false;
     return nconf.argv()
         .env()
-        .file({file: path.join(__dirname, 'users.json')})
-};
+        .file({file: path.join(__dirname, 'users.json')});
+}

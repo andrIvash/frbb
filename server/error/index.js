@@ -1,8 +1,7 @@
-var path = require('path'),
-    util = require('util'),
-    http = require('http');
+import util from 'util';
+import http from 'http';
 
-//ошибки для выдачи посетителю
+// ошибки для выдачи посетителю
 
 function HttpError(status, message) {
     Error.apply(this, arguments);
@@ -14,6 +13,6 @@ function HttpError(status, message) {
 
 util.inherits(HttpError, Error);
 
-HttpError.prototype.name = "HttpError";
+HttpError.prototype.name = 'HttpError';
 
 exports.HttpError = HttpError;

@@ -1,9 +1,13 @@
-const express  = require('express');
-const app = module.exports = express();
-var  HttpError = require('../../error').HttpError;
+import { Router } from 'express';
+import { HttpError } from '../../error';
+import route from './v1.0';
 
-app.use('/v1.0', require('./v1.0')); // REST
+const app = Router();
+
+app.use('/v1.0', route);
 
 app.get('/', (req, res) => {
-   res.send(new HttpError(400, 'api ok, please choose version /v1.0 or /v2.0'));
+   res.send(new HttpError(400, 'api ok, please choose version /v1.0'));
 });
+
+export default app;

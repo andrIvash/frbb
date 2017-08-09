@@ -1,50 +1,54 @@
-const express = require('express'),
-    app = require('express')(),
-    http = require('http'),
-    path = require('path'),
-    util = require('util'),
-    errorHandler = require('errorhandler'),
-    config = require('./config/');
+import express from 'express';
+import http from 'http';
+import path from 'path';
+import errorHandler from 'errorhandler';
+import config from './config/';
+import routes from './routes';
+import { HttpError } from './error/';
+import sendHttpError from './middleware/sendHttpError';
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, '/templates'));
 app.set('view engine', 'pug');
 
 // подключение middleware
-app.use(require('./middleware/sendHttpError'));
+app.use(sendHttpError);
 
-//подключение routes
-require('./routes')(app);
+// подключение routes
+routes(app);
 
-//--------------------  обработка ошибки  ------------------//
-var  HttpError = require('./error/').HttpError;
+// --------------------  обработка ошибки  ------------------//
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new HttpError(400, 'wrong query');
+app.use((req, res, next) => {
+    const err = new HttpError(400, 'wrong query');
     next(err);
 });
 
 // error handlers
-app.use(function(err, req, res, next) {
-    if (typeof err == 'number') {
+app.use((err, req, res, next) => {
+    if (typeof err === 'number') {
         err = new HttpError(err);
     }
     if (err instanceof HttpError) {
         res.sendHttpError(err);
-    } else {
-        if (app.get('env') === 'development') {
-            var errorhandler = errorHandler();
+    } else if (app.get('env') === 'development') {
+            const errorhandler = errorHandler();
             errorhandler(err, req, res, next);
         } else {
-            log.error(err);
+            console.error(err);
             err = new HttpError(500);
             res.sendHttpError(err);
         }
     }
-});
+);
 
 
-//-------------------------запуск сервера ----------------------------//
-http.createServer(app).listen(config().get('port'), function(){  // запускаем сервер
+// -------------------------запуск сервера ----------------------------//
+
+http.createServer(app).listen(config().get('port'), function() {
     console.log('express server listening on port : ' + config().get('port'));
 });
+

@@ -1,14 +1,15 @@
-const express  = require('express');
-const app = module.exports = express();
-const fs = require('fs');
-const nconf = require('nconf');
-const  HttpError = require('../../../../error').HttpError;
-const data = require('../../../../data');
+import { Router } from 'express';
+import fs from 'fs';
+import nconf from 'nconf';
+import { HttpError } from '../../../../error';
+import data from '../../../../data';
 
+const app = Router();
 
 app.get('/', (req, res) => {
     res.send(data().get('users'));
 });
+
 app.get('/:id', (req, res, next) => {
     if (!isNaN(parseFloat(req.params.id)) && isFinite(req.params.id)) {
         let id = findUser(parseFloat(req.params.id));
@@ -28,13 +29,13 @@ app.post('/', (req, res, next) => {
         users.push({id: users.length + 1, name: req.body.name, score: req.body.score});
         nconf.set('users', users);
         nconf.save();
-        res.send({status:'ok', message: 'users add'})
+        res.send({status: 'ok', message: 'users add'});
     } else {
         next(new HttpError(400, 'wronq query'));
     }
 });
 
-app.patch('/:id', (req, res,  next) => {
+app.patch('/:id', (req, res, next) => {
     if (!isNaN(parseFloat(req.params.id)) && isFinite(req.params.id)) {
         let id = findUser(parseFloat(req.params.id));
         if (id >= 0) {
@@ -61,7 +62,7 @@ app.delete('/:id', (req, res, next) => {
             users.splice(id, 1);
             nconf.set('users', users);
             nconf.save();
-            res.send({status:'ok', message: 'user delete'});
+            res.send({status: 'ok', message: 'user delete'});
         } else {
             next(new HttpError(200, 'user not found'));
         }
@@ -73,5 +74,7 @@ app.delete('/:id', (req, res, next) => {
 function findUser(id) {
     return data().get('users').findIndex((elem) => {
         return elem.id === id;
-    })
+    });
 }
+
+export default app;
